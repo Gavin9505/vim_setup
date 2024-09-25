@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =9
+let g:netrw_dirhist_9='/home/gavin/TC_STSPIN'
+let g:netrw_dirhist_8='/home/gavin/TC_STSPIN/TMotorController/include'
+let g:netrw_dirhist_7='/home/gavin/TC_STSPIN/TMotorController'
+let g:netrw_dirhist_6='/home/gavin/.vim/settings/plugins'
+let g:netrw_dirhist_5='/home/gavin/.vim/settings'
+let g:netrw_dirhist_4='/home/gavin/.vim'
+let g:netrw_dirhist_3='/home/gavin/.vim/settings'
+let g:netrw_dirhist_2='/home/gavin/.vim/settings/plugins'
+let g:netrw_dirhist_1='/home/gavin/.vim/settings'
+let g:netrw_dirhist_0='/home/gavin/.vim/settings/plugins'
