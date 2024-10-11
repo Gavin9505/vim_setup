@@ -6,10 +6,10 @@ FILE_LIST=$(mktemp)
 OUTPUT_FILE_PATH="$PWD/tags"
 
 
-find "$PROJECT_ROOT" -type f \( -name "*.${EXTENSIONS[0]}" "$(for ext in "${EXTENSIONS[@]:1}"; do echo -o -name "*.$ext"; done)" \) > "${FILE_LIST}"
+find "$PROJECT_ROOT" -type f \( -name "*.${EXTENSIONS[0]}" $(for ext in "${EXTENSIONS[@]:1}"; do echo -o -name "*.$ext"; done) \) > "${FILE_LIST}"
 
 echo "Generating ctags..."
-ctags -R --languages=C,C++,Python,Vim, --fields=+l --extras=+q -L "${FILE_LIST}" -f "${OUTPUT_FILE_PATH}/tags" 
+ctags -R --languages=C,C++,Python,Vim, --fields=+l --extra=+q -L "${FILE_LIST}" -f "${OUTPUT_FILE_PATH}/tags" 
 
 echo "Generating cscope..."
 cscope -RCbqk -f "${OUTPUT_FILE_PATH}/cscope.out" -i "${FILE_LIST}"
