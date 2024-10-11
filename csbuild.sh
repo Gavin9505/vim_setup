@@ -5,6 +5,7 @@ EXTENSIONS=("c" "cpp" "py" "vimrc" "shellcheck" "h")
 FILE_LIST=$(mktemp)
 OUTPUT_FILE_PATH="$PWD/tags"
 
+mkdir $OUTPUT_FILE_PATH
 
 find "$PROJECT_ROOT" -type f \( -name "*.${EXTENSIONS[0]}" $(for ext in "${EXTENSIONS[@]:1}"; do echo -o -name "*.$ext"; done) \) > "${FILE_LIST}"
 
