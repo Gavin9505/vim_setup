@@ -2,9 +2,10 @@
 let g:gutentags_project_root = ['.git', '.hg', '.svn', '.project']
 let g:gutentags_cache_dir = expand('~/.cache/tags')
 let g:gutentags_cscope_build_inverted_index = 1
-let g:gutentags_modules = ['ctags', 'cscope']
+let g:gutentags_modules = ['ctags']
 
 set tags=./tags,tags;
+
 "Cscope setting
 if has("cscope")
 	set cst

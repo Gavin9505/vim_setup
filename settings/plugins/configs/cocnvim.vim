@@ -1,7 +1,7 @@
 " https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
 
 "Cocnvim extensions list by 2024/10/18"
-let g:coc_global_extensions = ['coc-marketplace', 'coc-json', 'coc-git', 'coc-tsserver', 'coc-clangd', 'coc-sh', 'coc-vimlsp' ]
+let g:coc_global_extensions = ['coc-marketplace', 'coc-json', 'coc-tsserver', 'coc-clangd', 'coc-sh', 'coc-vimlsp' ]
 
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
 " utf-8 byte sequence

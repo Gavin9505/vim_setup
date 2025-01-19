@@ -12,7 +12,7 @@
 	set hidden
 	set completeopt="meun,menuone,noselect"
 	set encoding=utf-8
-
+	set updatetime=100	
 "Indent"
 	set cindent
 	"set cinwords
@@ -29,6 +29,7 @@
 	set smartcase
 	set incsearch
 	set hlsearch
+	set showmatch
 	hi Search cterm=reverse ctermbg=none ctermfg=none
 
 "UI config"
@@ -54,3 +55,12 @@
 	endif
 	
 	execute 'set undodir=' . undoDirPath 
+"Terminal"
+	set termguicolors
+	"Gruvbox color"
+	let g:terminal_ansi_colors = [
+	    \ '#282828', '#cc241d', '#98971a', '#d79921',
+	    \ '#458588', '#b16286', '#689d6a', '#a89984',
+	    \ '#928374', '#fb4934', '#b8bb26', '#fabd2f',
+	    \ '#83a598', '#d3869b', '#8ec07c', '#ebdbb2'
+	    \ ]

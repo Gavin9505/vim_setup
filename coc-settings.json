@@ -1,12 +1,3 @@
 {
-  "clangd.path": "/usr/bin/clangd",
-  "languageserver":{
-      "arduino":{ 
-	"command":"/home/gavin/go/bin/arduino-language-server",
-	"rootPatterns":["*.ino","*.cpp"],
-	"filetypes":["arduino", "ino", "cpp"],
-	"args":["-cli", "/home/gavin/embedded/arduino/arduino-cli", "-clangd", "/usr/bin/clangd", "-cli-config", "/home/gavin/.arduino15/arduino-cli.yaml", "-fqbn", "STMicroelectronics:stm32:GenF1"],
-	"disabledFeatures":["semanticTokens"]
-      }
-    }
+  "clangd.path": "/usr/bin/clangd"
 }
