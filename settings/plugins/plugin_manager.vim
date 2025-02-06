@@ -58,7 +58,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'ludovicchabant/vim-gutentags'
 
     "---------------------------------------------"
-    "語言伺服器                                         "
+    "語言伺服器                                   "
     "---------------------------------------------"
 	"Langage Server protocol"
 	Plug 'neoclide/coc.nvim',{'branch': 'release'}
@@ -91,7 +91,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'mhinz/vim-startify'
 	
     "---------------------------------------------"
-    "待測試                                          "
+    "待測試                                       "
     "---------------------------------------------"
 	Plug 'vim-scripts/DrawIt'
 

@@ -19,7 +19,7 @@ nnoremap <S-End> :tabnext<CR>
 nnoremap <F3> :terminal<CR>
 
 "Plugin Teanslate
-nnoremap <F2> :TranslateW<CR>
+nnoremap tt :TranslateW<CR>
 
 "Plugin Fern
 nnoremap <F5> :Fern -drawer . -toggle -stay<CR>
