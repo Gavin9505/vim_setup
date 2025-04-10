@@ -30,6 +30,3 @@ endfunction
 " 綁定命令快
 command! FocusModeToggle call ToggleFocusMode()
 
-" 綁定快捷鍵
-nnoremap <F2> :FocusModeToggle<CR>
-

@@ -14,7 +14,7 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 "Plug List"
 call plug#begin('~/.vim/plugged')
     "---------------------------------------------"
-    "#檔案瀏覽                                     "
+    "#檔案瀏覽                                    "
     "---------------------------------------------"
 	"File explorer"
 	Plug 'lambdalisue/fern.vim'
@@ -94,6 +94,8 @@ call plug#begin('~/.vim/plugged')
     "待測試                                       "
     "---------------------------------------------"
 	Plug 'vim-scripts/DrawIt'
+	Plug 'voldikss/vim-floaterm'
+
 
 call plug#end()
 

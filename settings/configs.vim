@@ -1,11 +1,12 @@
 "System"
+	filetype plugin indent on
 	syntax on
 	set nocompatible
 	set backspace=indent,eol,start
 	set history=500
 	set mouse=a
 	set autowrite
-	"set foldmethod=syntax
+	set foldmethod=syntax
 	set clipboard=unnamed
 	set noequalalways
 	set pumheight=10
@@ -13,11 +14,12 @@
 	set completeopt="meun,menuone,noselect"
 	set encoding=utf-8
 	set updatetime=100	
+
 "Indent"
 	set cindent
 	"set cinwords
 	set noexpandtab
-	set tabstop=8
+	set tabstop=4
 	set softtabstop=4
 	set shiftwidth=4
 	set smarttab
@@ -55,6 +57,7 @@
 	endif
 	
 	execute 'set undodir=' . undoDirPath 
+
 "Terminal"
 	set termguicolors
 	"Gruvbox color"
@@ -64,3 +67,7 @@
 	    \ '#928374', '#fb4934', '#b8bb26', '#fabd2f',
 	    \ '#83a598', '#d3869b', '#8ec07c', '#ebdbb2'
 	    \ ]
+
+"Leader key
+	let mapleader = " "
+

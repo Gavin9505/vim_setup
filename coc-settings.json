@@ -1,3 +1,4 @@
 {
-  "clangd.path": "/usr/bin/clangd"
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/19.1.2/clangd_19.1.2/bin/clangd",
+  "semanticTokens.enable": true
 }
