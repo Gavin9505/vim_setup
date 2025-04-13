@@ -12,9 +12,9 @@ nnoremap <S-Left> <C-w>> :vertical resize +2<CR>
 nnoremap <S-Right> <C-w>< :vertical resize -2<CR>
 
 "Tabs navigaion
-nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>th :tabprevious<CR>
-nnoremap <leader>tl :tabnext<CR>
+nnoremap tn :tabnew<CR>
+nnoremap th :tabprevious<CR>
+nnoremap tl :tabnext<CR>
 
 "Support visual mode, use ctrl + y to copy text"
 vnoremap <C-y> "+y
@@ -34,7 +34,6 @@ tnoremap <Esc><Esc> <C-\><C-n>
 
 " 快速離開 terminal 模式
 tnoremap <C-q> <C-\><C-n>:close<CR>
-
 
 "<Requires plugin support =============================>
 

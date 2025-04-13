@@ -23,3 +23,7 @@ if !empty(glob('~/.vim/plugged/vim-gitgutter'))
 	source $HOME/.vim/settings/plugins/configs/vim_gitgutter.vim
 endif
 
+if !empty(glob('~/.vim/plugged/vim-startify'))
+	source $HOME/.vim/settings/plugins/configs/vim_startify.vim
+endif
+

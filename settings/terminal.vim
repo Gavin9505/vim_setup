@@ -1,71 +1,179 @@
-if exists("g:loaded_terminal_toggle")
-  finish
-endif
-let g:loaded_terminal_toggle = 1
+" === Profile 定義 ===
+let g:my_terminal_profiles = {
+      \ 'default': $SHELL,
+      \ 'python': ['python3', '-i'],
+      \ 'make':   ['make']
+      \ }
 
-command! Term call s:term_toggle('bash')
-command! TermGDB call s:term_toggle('gdb')
-command! TermPy call s:term_toggle('python3')
-command! -nargs=1 TermExec call s:term_toggle(<q-args>)
-command! TermKillAll call s:term_kill_all()
+let g:my_terminal_bufs = {}
 
-nnoremap <silent> <leader>tt :Term<CR>
-nnoremap <silent> <leader>tg :TermGDB<CR>
-nnoremap <silent> <leader>tp :TermPy<CR>
 
-function! s:term_toggle(profile) abort
-  let l:bufname = 'term://' . a:profile
 
-  for l:buf in getbufinfo({'buflisted': 1})
-    if bufname(l:buf.bufnr) ==# l:bufname
-      if bufwinnr(l:buf.bufnr) != -1
-        call job_stop(term_getjob(l:buf.bufnr))
-        execute l:buf.bufnr . 'bwipeout!'
-        return
-      endif
-    endif
-  endfor
 
-  execute 'botright split +' . a:profile
-  let l:cmd = (a:profile ==# 'bash') ? &shell : a:profile
-  call term_start(l:cmd, #{term_name: l:bufname, curwin: v:true})
-  call s:term_apply_ui_settings()
+" === UI 設定 ===
+function! s:SetupTerminalUI(bufnr) abort
+  call setbufvar(a:bufnr, '&number', 0)
+  call setbufvar(a:bufnr, '&relativenumber', 0)
+  call setbufvar(a:bufnr, '&signcolumn', 'no')
+  call setbufvar(a:bufnr, '&wrap', 0)
 endfunction
 
-function! s:term_apply_ui_settings() abort
-  if &buftype !=# 'terminal'
-    return
+
+
+
+" === 單實例 Toggle ===
+function! ToggleTerminal(profile, ...) abort
+  let l:inplace = get(a:, 1, v:false)
+  let l:cmd = get(g:my_terminal_profiles, a:profile, $SHELL)
+
+  if has_key(g:my_terminal_bufs, a:profile)
+        \ && bufexists(g:my_terminal_bufs[a:profile])
+        \ && getbufvar(g:my_terminal_bufs[a:profile], '&buftype') ==# 'terminal'
+
+    let l:buf = g:my_terminal_bufs[a:profile]
+    let l:status = term_getstatus(l:buf)
+
+    if empty(win_findbuf(l:buf)) && l:status =~# 'running'
+      if l:inplace
+        execute 'buffer' l:buf
+      else
+        execute 'botright sbuffer' l:buf
+      endif
+      call s:SetupTerminalUI(l:buf)
+      call feedkeys("i", 'n')
+      return
+    elseif l:status =~# 'running'
+      call term_setkill(l:buf, 'kill')
+      call term_wait(l:buf, 300)
+    endif
+
+    execute 'bwipeout!' l:buf
+    call remove(g:my_terminal_bufs, a:profile)
   endif
 
-  setlocal nonumber norelativenumber signcolumn=no nowrap
-  startinsert
+  let l:buf = term_start(l:cmd, #{term_kill: 'kill', term_finish: 'close', hidden: v:true})
+  let g:my_terminal_bufs[a:profile] = l:buf
+  let b:terminal_profile = a:profile
 
-  let &t_SI = "\e[5 q"
-  let &t_SR = "\e[3 q"
-  let &t_EI = "\e[1 q"
+  if l:inplace
+    execute 'buffer' l:buf
+  else
+    execute 'botright sbuffer' l:buf
+  endif
 
-  set termguicolors
-  let &t_8f = "\e[38;2;%lu;%lu;%lum"
-  let &t_8b = "\e[48;2;%lu;%lu;%lum"
-
-  let &t_BE = "\e[?2004h"
-  let &t_BD = "\e[?2004l"
-  let &t_PS = "\e[200~"
-  let &t_PE = "\e[201~"
-
-  let &t_fe = "\e[?1004h"
-  let &t_fd = "\e[?1004l"
-  execute "set <FocusGained>=\e[I"
-  execute "set <FocusLost>=\e[O"
-
-  set ttymouse=sgr
+  call s:SetupTerminalUI(l:buf)
+  call feedkeys("i", 'n')
 endfunction
 
-function! s:term_kill_all() abort
-  for l:buf in getbufinfo({'buflisted': 1})
-    if getbufvar(l:buf.bufnr, '&buftype') ==# 'terminal'
-      call job_stop(term_getjob(l:buf.bufnr))
-      execute l:buf.bufnr . 'bwipeout!'
+
+
+
+" === 多實例開啟 ===
+function! TermNew(profile, ...) abort
+  let l:inplace = get(a:, 1, v:false)
+  let l:cmd = get(g:my_terminal_profiles, a:profile, $SHELL)
+
+  let l:buf = term_start(l:cmd, #{term_kill: 'kill', term_finish: 'close', hidden: v:true})
+  call setbufvar(l:buf, 'terminal_profile', a:profile)
+
+  if l:inplace
+    execute 'buffer' l:buf
+  else
+    execute 'botright sbuffer' l:buf
+  endif
+  call s:SetupTerminalUI(l:buf)
+  call feedkeys("i", 'n')
+endfunction
+
+
+
+
+" === Focus 主 terminal buffer ===
+function! FocusTerminal(profile) abort
+  if has_key(g:my_terminal_bufs, a:profile)
+        \ && bufexists(g:my_terminal_bufs[a:profile])
+    let l:buf = g:my_terminal_bufs[a:profile]
+    let l:wins = win_findbuf(l:buf)
+    if !empty(l:wins)
+      execute win_id2win(l:wins[0]) . 'wincmd w'
+      return 1
     endif
-  endfor
+  endif
+  return 0
 endfunction
+
+
+
+
+" === Terminal buffer 快捷切換 ===
+function! TermList() abort
+  redir => l:out
+  silent! echo "Current terminal buffers:"
+  for l:bufnr in term_list()
+    let l:profile = getbufvar(l:bufnr, 'terminal_profile', '')
+    let l:name = bufname(l:bufnr)
+    let l:status = term_getstatus(l:bufnr)
+    echo printf("  #%d  [%s]  %s", l:bufnr, l:profile, l:status)
+  endfor
+  redir END
+  echo l:out
+endfunction
+
+
+
+
+" === FZF 選單切 terminal ===
+function! TermPick() abort
+  if !exists('*fzf#run')
+    echo "fzf.vim not installed"
+    return
+  endif
+  let l:list = []
+  for l:buf in term_list()
+    let l:profile = getbufvar(l:buf, 'terminal_profile', 'unknown')
+    let l:name = bufname(l:buf)
+    call add(l:list, printf('%3d │ %-10s │ %s', l:buf, l:profile, l:name))
+  endfor
+  call fzf#run(fzf#wrap({
+        \ 'source': l:list,
+        \ 'prompt': 'Terminal> ',
+        \ 'sink': function('s:JumpToBufFromLine')
+        \ }))
+endfunction
+
+function! s:JumpToBufFromLine(line) abort
+  let l:parts = split(a:line, '\s\+│')
+  let l:buf = str2nr(l:parts[0])
+  if bufexists(l:buf)
+    execute 'sbuffer' l:buf
+  endif
+endfunction
+
+
+
+
+" === Directional Keys ===
+for [lhs, rhs] in [['<C-h>', 'h'], ['<C-j>', 'j'], ['<C-k>', 'k'], ['<C-l>', 'l']]
+  execute 'tnoremap <silent> ' . lhs . ' <C-\><C-N><C-w>' . rhs
+  execute 'nnoremap <silent> ' . lhs . ' <C-w>' . rhs
+endfor
+
+
+
+
+" === Commands ===
+command! -nargs=? TermToggle call ToggleTerminal(<f-args>, v:true)
+command! -nargs=? TermNew    call TermNew(<f-args>, v:true)
+command! -nargs=? TermFocus  call FocusTerminal(<f-args>)
+command! TermList            call TermList()
+command! TermPick            call TermPick()
+
+
+" 快捷鍵設定
+nnoremap <Leader>tt :TermNew default<CR>
+nnoremap <Leader>tp :TermToggle python<CR>
+nnoremap <Leader>tn :TermNew default<CR>
+
+nnoremap <Leader>tf :TermFocus default<CR>
+nnoremap <Leader>tl :TermList<CR>
+nnoremap <Leader>tk :TermPick<CR>
