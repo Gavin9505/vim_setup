@@ -4,10 +4,7 @@ let g:my_terminal_profiles = {
       \ 'python': ['python3', '-i'],
       \ 'make':   ['make']
       \ }
-
 let g:my_terminal_bufs = {}
-
-
 
 
 " === UI 設定 ===
@@ -17,8 +14,6 @@ function! s:SetupTerminalUI(bufnr) abort
   call setbufvar(a:bufnr, '&signcolumn', 'no')
   call setbufvar(a:bufnr, '&wrap', 0)
 endfunction
-
-
 
 
 " === 單實例 Toggle ===
@@ -66,8 +61,6 @@ function! ToggleTerminal(profile, ...) abort
 endfunction
 
 
-
-
 " === 多實例開啟 ===
 function! TermNew(profile, ...) abort
   let l:inplace = get(a:, 1, v:false)
@@ -86,8 +79,6 @@ function! TermNew(profile, ...) abort
 endfunction
 
 
-
-
 " === Focus 主 terminal buffer ===
 function! FocusTerminal(profile) abort
   if has_key(g:my_terminal_bufs, a:profile)
@@ -103,8 +94,6 @@ function! FocusTerminal(profile) abort
 endfunction
 
 
-
-
 " === Terminal buffer 快捷切換 ===
 function! TermList() abort
   redir => l:out
@@ -118,8 +107,6 @@ function! TermList() abort
   redir END
   echo l:out
 endfunction
-
-
 
 
 " === FZF 選單切 terminal ===
@@ -150,30 +137,11 @@ function! s:JumpToBufFromLine(line) abort
 endfunction
 
 
-
-
-" === Directional Keys ===
-for [lhs, rhs] in [['<C-h>', 'h'], ['<C-j>', 'j'], ['<C-k>', 'k'], ['<C-l>', 'l']]
-  execute 'tnoremap <silent> ' . lhs . ' <C-\><C-N><C-w>' . rhs
-  execute 'nnoremap <silent> ' . lhs . ' <C-w>' . rhs
-endfor
-
-
-
-
 " === Commands ===
-command! -nargs=? TermToggle call ToggleTerminal(<f-args>, v:true)
+command! -nargs=? TermToggle call ToggleTerminal(<f-args>)
 command! -nargs=? TermNew    call TermNew(<f-args>, v:true)
 command! -nargs=? TermFocus  call FocusTerminal(<f-args>)
 command! TermList            call TermList()
 command! TermPick            call TermPick()
 
 
-" 快捷鍵設定
-nnoremap <Leader>tt :TermNew default<CR>
-nnoremap <Leader>tp :TermToggle python<CR>
-nnoremap <Leader>tn :TermNew default<CR>
-
-nnoremap <Leader>tf :TermFocus default<CR>
-nnoremap <Leader>tl :TermList<CR>
-nnoremap <Leader>tk :TermPick<CR>
